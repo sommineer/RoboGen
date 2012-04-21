@@ -39,22 +39,22 @@ public class Driver {
 	/**
 	 * Table model for when the robot is running
 	 */
-	rightTableModel run;
+	ActionListTableModel run;
 	
 	/**
 	 * Table model for when the a robot is scanned
 	 */
-	rightTableModel scan;
+	ActionListTableModel scan;
 	
 	/**
 	 * Table model for when the robot is hit by a bullet
 	 */
-	rightTableModel bullet;
+	ActionListTableModel bullet;
 	
 	/**
 	 * Table model for when the robot hits a wall
 	 */
-	rightTableModel wall;
+	ActionListTableModel wall;
 
 	/**
 	 * Main method of the program
@@ -87,7 +87,7 @@ public class Driver {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					mainWindow window = new mainWindow(d);
+					MainWindow window = new MainWindow(d);
 					window.window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -122,10 +122,10 @@ public class Driver {
 	public void initRightTable() {
 		
 		// Create the table models
-		run = new rightTableModel();
-		scan = new rightTableModel();
-		bullet = new rightTableModel();
-		wall = new rightTableModel();
+		run = new ActionListTableModel();
+		scan = new ActionListTableModel();
+		bullet = new ActionListTableModel();
+		wall = new ActionListTableModel();
 		
 		// Initialize the models
 		for(int i=0; i < run.getRowCount(); i++){

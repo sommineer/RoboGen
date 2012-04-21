@@ -60,20 +60,19 @@ import robocode.control.BattlefieldSpecification;
 import robocode.control.RobocodeEngine;
 import robocode.control.RobotSpecification;
 
-
-public class mainWindow {
+public class MainWindow {
 	
 	private String roboCodeDirectory = "C:\\robocode";
 
 	/**
 	 * The list of command categories
 	 */
-	final JList groupList = new JList();
+	final JList<String> groupList = new JList<String>();
 
 	/**
 	 * The entire panel on the left-hand side
 	 */
-	final JList cmdList = new JList();
+	final JList<String> cmdList = new JList<String>();
 	JTextArea mAr, tAr, bAa, bAb;
 	JPanel argPanel,codePanel;
 	private CardLayout cl;
@@ -97,7 +96,7 @@ public class mainWindow {
 	/**
 	 * Create the application.
 	 */
-	public mainWindow(Driver d) {
+	public MainWindow(Driver d) {
 		this.d = d;
 		initialize();
 	}
@@ -143,13 +142,13 @@ public class mainWindow {
 			}
 		});
 
-		groupList.setModel(new AbstractListModel() {
+		groupList.setModel(new AbstractListModel<String>() {
 			private static final long serialVersionUID = 1L;
 			String[] values = new String[] {"Basic Movement", "Basic Turning", "Basic Gun Control", "Advanced Turning"};
 			public int getSize() {
 				return values.length;
 			}
-			public Object getElementAt(int index) {
+			public String getElementAt(int index) {
 				return values[index];
 			}
 		});
@@ -822,14 +821,14 @@ public class mainWindow {
 	 * and any arguments associated with the method.
 	 */
 	private void addCmd() {
-		rightTableModel rModel = (rightTableModel) rightTable.getModel();
+		ActionListTableModel rModel = (ActionListTableModel) rightTable.getModel();
 		String selectedValue = (String)cmdList.getSelectedValue();
 		rModel.addValueAt(selectedValue,getParams());
 		rightTable.repaint();
 	}
 
 	private void removeCmd(){
-		rightTableModel rModel = (rightTableModel) rightTable.getModel();
+		ActionListTableModel rModel = (ActionListTableModel) rightTable.getModel();
 		int[] selectedRows = rightTable.getSelectedRows();
 
 		for(int i = 0; i < selectedRows.length; i++){
