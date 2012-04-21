@@ -52,6 +52,13 @@ import java.util.Scanner;
 import javax.swing.JTable;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.tools.JavaCompiler;
+import javax.tools.ToolProvider;
+
+import robocode.control.BattleSpecification;
+import robocode.control.BattlefieldSpecification;
+import robocode.control.RobocodeEngine;
+import robocode.control.RobotSpecification;
 
 /**
  * Main windows for RoboGen
@@ -59,6 +66,8 @@ import javax.swing.JScrollPane;
  *
  */
 public class MainWindow {
+	
+	private String roboCodeDirectory = "C:\\robocode";
 
 	/**
 	 * List of command categories
@@ -409,10 +418,10 @@ public class MainWindow {
 			public void mouseReleased(MouseEvent me) {
 				Writer.writeToJavaFile(d.mModelRun.data,d.mModelScan.data,d.mModelBullet.data,d.mModelWall.data);
 				addCodeToWindow();
-
-				JOptionPane.showMessageDialog(null, "Code Generated to D drive","Generation Success", 1);
-
-
+				
+				startBattle();
+				
+				//JOptionPane.showMessageDialog(null, "Code Generated to D drive","Generation Success", 1);
 			}
 		});
 		generateBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -543,7 +552,7 @@ public class MainWindow {
 
 		codeTextArea = new JTextArea();
 		codeTextArea.setEditable(false);
-		codeTextArea.setPreferredSize(new Dimension(codePanelWidth-10, codeAreaHeight-10));
+		//codeTextArea.setPreferredSize(new Dimension(codePanelWidth-10, codeAreaHeight-10));
 		codeTextArea.setText("No Actions");
 
 		codeTextArea.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -577,9 +586,78 @@ public class MainWindow {
 		window.setJMenuBar(createMenuBar());
 	}
 
-	protected void addCodeToWindow() {
+	protected void startBattle() {
+		
+		RobocodeEngine roboEngine = new RobocodeEngine(new File(roboCodeDirectory));
+		
+		File robotDirectory = RobocodeEngine.getRobotsDir();
+		
+		File codeFile = new File(Writer.filePath);
+		
+		String robotDirectoryPath = robotDirectory.getAbsolutePath();
+		
+		File ddRobotFile = new File(robotDirectoryPath + "\\discoveryDay\\DD_Robot.java");
+		
+		if(ddRobotFile.exists()){
+			ddRobotFile.delete();
+		}
+		
+		boolean moved = codeFile.renameTo(new File(robotDirectoryPath + "\\discoveryDay\\DD_Robot.java"));
+		
+		if(!moved){
+			throw new RuntimeException("File not moved.");
+		}
+		
+		codeFile = new File(robotDirectoryPath + "\\discoveryDay\\DD_Robot.java");
+		
+		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+		
+		if(compiler != null){
+			int compileResult = compiler.run(null, null, null, codeFile.getAbsolutePath());
+			
+			if(compileResult == 0){
+				System.out.println("Robot successfully compiled.");
+			}
+			else{
+				System.out.println("Robot not successfully compiled.");
+			}
+		}
+		
+		else{
+			System.err.println("Compiler not found, robot will not be updated.");
+		}
+		
+		
+		
+		RobotSpecification[] availableRobots = roboEngine.getLocalRepository();
+		
+		RobotSpecification[] robotsToBattle = new RobotSpecification[3];
+		
+		for(int i=0; i < availableRobots.length; i++){
+			
+			if(availableRobots[i].getName().equals("discoveryDay.DD_Robot*")){
+				robotsToBattle[0] = availableRobots[i];
+				break;
+			}
+		}
+		
+		robotsToBattle[1] = availableRobots[0];
+		robotsToBattle[2] = availableRobots[availableRobots.length - 1];
+		
+		BattlefieldSpecification batFieldSpec = new BattlefieldSpecification();
+		
+		BattleSpecification batSpec = new BattleSpecification(3,batFieldSpec,robotsToBattle);
+		
+		roboEngine.setVisible(true);
+		
+		roboEngine.runBattle(batSpec, false);	
+		
+		
+	}
 
-		File codeFile = new File("D:\\DD_Robot.java");
+	protected void addCodeToWindow() {
+		
+		File codeFile = new File(Writer.filePath);
 
 		try {
 			Scanner fileScan = new Scanner(codeFile);
