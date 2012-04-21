@@ -39,22 +39,22 @@ public class Driver {
 	/**
 	 * Table model for when the robot is running
 	 */
-	RightTableModel run;
+	ActionListTableModel run;
 	
 	/**
 	 * Table model for when the a robot is scanned
 	 */
-	RightTableModel scan;
+	ActionListTableModel scan;
 	
 	/**
 	 * Table model for when the robot is hit by a bullet
 	 */
-	RightTableModel bullet;
+	ActionListTableModel bullet;
 	
 	/**
 	 * Table model for when the robot hits a wall
 	 */
-	RightTableModel wall;
+	ActionListTableModel wall;
 
 	/**
 	 * Main method of the program
@@ -122,10 +122,10 @@ public class Driver {
 	public void initRightTable() {
 		
 		// Create the table models
-		run = new RightTableModel();
-		scan = new RightTableModel();
-		bullet = new RightTableModel();
-		wall = new RightTableModel();
+		run = new ActionListTableModel();
+		scan = new ActionListTableModel();
+		bullet = new ActionListTableModel();
+		wall = new ActionListTableModel();
 		
 		// Initialize the models
 		for(int i=0; i < run.getRowCount(); i++){

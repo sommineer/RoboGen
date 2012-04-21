@@ -742,14 +742,14 @@ public class MainWindow {
 	 * and any arguments associated with the method.
 	 */
 	private void addCmd() {
-		RightTableModel rModel = (RightTableModel) rightTable.getModel();
+		ActionListTableModel rModel = (ActionListTableModel) rightTable.getModel();
 		String selectedValue = (String)cmdList.getSelectedValue();
 		rModel.addValueAt(selectedValue,getParams());
 		rightTable.repaint();
 	}
 
 	private void removeCmd(){
-		RightTableModel rModel = (RightTableModel) rightTable.getModel();
+		ActionListTableModel rModel = (ActionListTableModel) rightTable.getModel();
 		int[] selectedRows = rightTable.getSelectedRows();
 
 		for(int i = 0; i < selectedRows.length; i++){
