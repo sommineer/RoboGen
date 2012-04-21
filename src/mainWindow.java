@@ -438,7 +438,7 @@ public class mainWindow {
 
 		codeTextArea = new JTextArea();
 		codeTextArea.setEditable(false);
-		codeTextArea.setPreferredSize(new Dimension(codePanelWidth-10, codeAreaHeight-10));
+		//codeTextArea.setPreferredSize(new Dimension(codePanelWidth-10, codeAreaHeight-10));
 		codeTextArea.setText("No Actions");
 		
 		codeTextArea.setAlignmentX(Component.LEFT_ALIGNMENT);
