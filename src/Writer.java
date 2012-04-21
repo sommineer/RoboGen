@@ -18,7 +18,7 @@ public class Writer {
     		FileWriter fw=new FileWriter("D:\\DD_Robot.java"/*robocode\\robots\\discoveryDay\\Robot.java"*/);
     		file=new PrintWriter(fw);
     		file.println("package discoveryDay;\n\nimport robocode.*;\n\n");
-    		file.println("public class DD_Robot extends JuniorRobot{\n\n\tpublic void run() {\n\t\t\n\n\t\t\twhile(true) {");
+    		file.println("public class DD_Robot extends JuniorRobot{\n\n\tpublic void mModelRun() {\n\t\t\n\n\t\t\twhile(true) {");
     		
     		
     		
@@ -39,7 +39,7 @@ public class Writer {
     		}
     		
     		file.println("\t}\n\n");
-    		Writer.insertComment("onHitByBullet: What to do when you're hit by a bullet");
+    		Writer.insertComment("onHitByBullet: What to do when you're hit by a mModelBullet");
     		file.println("\tpublic void onHitByBullet() {");
     		
     		for(int i=0;!bullet[i][0].equals("");i++){
@@ -48,7 +48,7 @@ public class Writer {
     		
     		
     		file.println("\t}\n\n");
-    		Writer.insertComment("onHitWall: What to do when you hit a wall");
+    		Writer.insertComment("onHitWall: What to do when you hit a mModelWall");
     		file.println("\tpublic void onHitWall() {");
     		
     		for(int i=0;!wall[i][0].equals("");i++){

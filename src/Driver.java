@@ -12,51 +12,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class Driver {
 	
 	/**
-	 * Category for basic move commands
-	 */
-	ActionCategory bMove;
-	
-	/**
-	 * Category for basic turn commands
-	 */
-	ActionCategory bTurn;
-	
-	/**
-	 * Category for basic gun commands
-	 */
-	ActionCategory bGun;
-	
-	/**
-	 * Category for advanced turn commands
-	 */
-	ActionCategory aTurn;
-	
-	/**
-	 * Category for advanced gun commands
-	 */
-	ActionCategory aGun;
-	
-	/**
-	 * Table model for when the robot is running
-	 */
-	ActionListTableModel run;
-	
-	/**
-	 * Table model for when the a robot is scanned
-	 */
-	ActionListTableModel scan;
-	
-	/**
-	 * Table model for when the robot is hit by a bullet
-	 */
-	ActionListTableModel bullet;
-	
-	/**
-	 * Table model for when the robot hits a wall
-	 */
-	ActionListTableModel wall;
-
-	/**
 	 * Main method of the program
 	 * @param args	ignored
 	 */
@@ -97,6 +52,51 @@ public class Driver {
 	}
 	
 	/**
+	 * Category for advanced gun commands
+	 */
+	ActionCategory mCatAdvGun;
+	
+	/**
+	 * Category for advanced turn commands
+	 */
+	ActionCategory mCatAdvTurn;
+	
+	/**
+	 * Category for basic gun commands
+	 */
+	ActionCategory mCatBasicGun;
+	
+	/**
+	 * Category for basic move commands
+	 */
+	ActionCategory mCatBasicMove;
+	
+	/**
+	 * Category for basic turn commands
+	 */
+	ActionCategory mCatBasicTurn;
+	
+	/**
+	 * Table model for when the robot is hit by a bullet
+	 */
+	ActionListTableModel mModelBullet;
+	
+	/**
+	 * Table model for when the robot is running
+	 */
+	ActionListTableModel mModelRun;
+	
+	/**
+	 * Table model for when the a robot is scanned
+	 */
+	ActionListTableModel mModelScan;
+
+	/**
+	 * Table model for when the robot hits a wall
+	 */
+	ActionListTableModel mModelWall;
+	
+	/**
 	 * Initializes the driver
 	 */
 	public void init() {
@@ -110,10 +110,10 @@ public class Driver {
 	public void initCommands() {
 		
 		// Initialize the commands
-		bMove = new ActionCategory(new String[] {"ahead", "back", "doNothing"});
-		bTurn = new ActionCategory(new String[] {"turnLeft", "turnRight", "turnTo"});
-		bGun = new ActionCategory(new String[] {"fire", "turnGunTo", "turnGunLeft", "turnGunRight"});
-		aTurn = new ActionCategory(new String[] {"turnAheadRight", "turnAheadLeft", "turnBackRight", "turnBackLeft"});
+		mCatBasicMove = new ActionCategory(new String[] {"ahead", "back", "doNothing"});
+		mCatBasicTurn = new ActionCategory(new String[] {"turnLeft", "turnRight", "turnTo"});
+		mCatBasicGun = new ActionCategory(new String[] {"fire", "turnGunTo", "turnGunLeft", "turnGunRight"});
+		mCatAdvTurn = new ActionCategory(new String[] {"turnAheadRight", "turnAheadLeft", "turnBackRight", "turnBackLeft"});
 	}
 	
 	/**
@@ -122,30 +122,30 @@ public class Driver {
 	public void initRightTable() {
 		
 		// Create the table models
-		run = new ActionListTableModel();
-		scan = new ActionListTableModel();
-		bullet = new ActionListTableModel();
-		wall = new ActionListTableModel();
+		mModelRun = new ActionListTableModel();
+		mModelScan = new ActionListTableModel();
+		mModelBullet = new ActionListTableModel();
+		mModelWall = new ActionListTableModel();
 		
 		// Initialize the models
-		for(int i=0; i < run.getRowCount(); i++){
-			run.setValueAt("", i, 0);
-			run.setValueAt("", i, 1);
+		for(int i=0; i < mModelRun.getRowCount(); i++){
+			mModelRun.setValueAt("", i, 0);
+			mModelRun.setValueAt("", i, 1);
 		}
 		
-		for(int i=0; i < scan.getRowCount(); i++){
-			scan.setValueAt("", i, 0);
-			scan.setValueAt("", i, 1);
+		for(int i=0; i < mModelScan.getRowCount(); i++){
+			mModelScan.setValueAt("", i, 0);
+			mModelScan.setValueAt("", i, 1);
 		}
 		
-		for(int i=0; i < bullet.getRowCount(); i++){
-			bullet.setValueAt("", i, 0);
-			bullet.setValueAt("", i, 1);
+		for(int i=0; i < mModelBullet.getRowCount(); i++){
+			mModelBullet.setValueAt("", i, 0);
+			mModelBullet.setValueAt("", i, 1);
 		}
 		
-		for(int i=0; i < wall.getRowCount(); i++){
-			wall.setValueAt("", i, 0);
-			wall.setValueAt("", i, 1);
+		for(int i=0; i < mModelWall.getRowCount(); i++){
+			mModelWall.setValueAt("", i, 0);
+			mModelWall.setValueAt("", i, 1);
 		}
 	}
 

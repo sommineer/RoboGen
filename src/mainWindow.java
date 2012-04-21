@@ -302,7 +302,7 @@ public class MainWindow {
 		JButton generateBtn = new JButton("Start!");
 		generateBtn.addMouseListener(new MouseAdapter() {
 			public void mouseReleased(MouseEvent me) {
-				Writer.writeToJavaFile(d.run.data,d.scan.data,d.bullet.data,d.wall.data);
+				Writer.writeToJavaFile(d.mModelRun.data,d.mModelScan.data,d.mModelBullet.data,d.mModelWall.data);
 				addCodeToWindow();
 				
 				JOptionPane.showMessageDialog(null, "Code Generated to D drive","Generation Success", 1);
@@ -404,7 +404,7 @@ public class MainWindow {
 		String columnNames[] = {"Action", "Parameters"};
 
 		rightTable = new JTable(null, columnNames);
-		rightTable.setModel(d.run);
+		rightTable.setModel(d.mModelRun);
 		rightTable.getColumnModel().getColumn(0).setResizable(false);
 		rightTable.getColumnModel().getColumn(1).setResizable(false);
 		rightTable.setPreferredScrollableViewportSize(new Dimension(200, 300));
@@ -639,19 +639,19 @@ public class MainWindow {
 	private void switchCmdList(int index) {
 		switch(index) {
 		case 0:
-			cmdList.setModel(d.bMove);
+			cmdList.setModel(d.mCatBasicMove);
 			break;
 		case 1:
-			cmdList.setModel(d.bTurn);
+			cmdList.setModel(d.mCatBasicTurn);
 			break;
 		case 2:
-			cmdList.setModel(d.bGun);
+			cmdList.setModel(d.mCatBasicGun);
 			break;
 		case 3:
-			cmdList.setModel(d.aTurn);
+			cmdList.setModel(d.mCatAdvTurn);
 			break;
 		default:
-			cmdList.setModel(d.bMove);
+			cmdList.setModel(d.mCatBasicMove);
 			break;
 		}
 		cmdList.setSelectedIndex(0);
@@ -720,19 +720,19 @@ public class MainWindow {
 	private void switchRightList(int menu) {
 		switch(menu) {
 		case RUN_MENU:
-			rightTable.setModel(d.run);
+			rightTable.setModel(d.mModelRun);
 			break;
 		case SCAN_MENU:
-			rightTable.setModel(d.scan);
+			rightTable.setModel(d.mModelScan);
 			break;
 		case BULLET_MENU:
-			rightTable.setModel(d.bullet);
+			rightTable.setModel(d.mModelBullet);
 			break;
 		case WALL_MENU:
-			rightTable.setModel(d.wall);
+			rightTable.setModel(d.mModelWall);
 			break;
 		default:
-			rightTable.setModel(d.run);
+			rightTable.setModel(d.mModelRun);
 			break;
 		}
 	}
