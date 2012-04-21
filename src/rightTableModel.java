@@ -2,9 +2,13 @@ import javax.swing.JOptionPane;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
+/**
+ * 
+ * @author Erik Sommer
+ *
+ */
+public class RightTableModel implements TableModel {
 
-public class rightTableModel implements TableModel {
-	private static final long serialVersionUID = 1L;
 	private static final int MAX_CMDS = 100;
 	private String[] columnNames = {"Method", "Parameters"};
 	public String[][] data = new String[MAX_CMDS][2];
