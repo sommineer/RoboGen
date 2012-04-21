@@ -239,7 +239,6 @@ public class ActionListTableModel implements TableModel {
 			for(int i = index; i < (currentIndex - 1); i++){
 				data[i][0] = data[i + 1][0];
 				data[i][1] = data[i + 1][1];
-				System.out.println("\tMoved mIndex " + (i + 1) + " values (" + data[i+1][0] + ", " + data[i + 1][1] + ") to " + i);
 			}
 
 			// Blank out the row
@@ -284,6 +283,7 @@ public class ActionListTableModel implements TableModel {
 			throw new IllegalArgumentException("value is not an instance of String");
 		}
 
+		// Set the value
 		data[row][col] = (String) value;
 
 	}

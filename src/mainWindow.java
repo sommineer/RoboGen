@@ -53,19 +53,28 @@ import javax.swing.JTable;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 
-
+/**
+ * Main windows for RoboGen
+ * @author Erik Sommer
+ *
+ */
 public class MainWindow {
 
 	/**
-	 * The list of command categories
+	 * List of command categories
 	 */
-	final JList<String> groupList = new JList<String>();
+	final JList<String> mActionCategoriesList = new JList<String>();
 
 	/**
-	 * The entire panel on the left-hand side
+	 * List of commands
 	 */
-	final JList<String> cmdList = new JList<String>();
-	JTextArea mAr, tAr, bAa, bAb;
+	final JList<String> mActionList = new JList<String>();
+
+
+	JTextArea mPixelsArea;
+	JTextArea mDegreesArea;
+	JTextArea bAa;
+	JTextArea bAb;
 	JPanel argPanel,codePanel;
 	private CardLayout cl;
 	JTextArea codeTextArea;
@@ -94,47 +103,121 @@ public class MainWindow {
 	}
 
 	/**
-	 * Initialize the contents of the frame.
+	 * Width of the window
 	 */
-	private void initialize() {
+	private static final int WINDOW_WIDTH = 1400;
 
-		Font labelFont = new Font(null, 1, 15);
-		ImageIcon icon = new ImageIcon("images/icon.png");
-		// Setup the window
-		window = new JFrame("RoboCode");
-		window.setSize(new Dimension(1400, 700));
-		window.setLocationRelativeTo(null);
-		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		window.setIconImage(icon.getImage());
+	/**
+	 * Height of the window
+	 */
+	private static final int WINDOW_HEIGHT = 700;
+
+	/**
+	 * Width of the action panel
+	 */
+	private static final int ACTION_PANEL_WIDTH = 200;
+
+	/**
+	 * Height of the action panel
+	 */
+	private static final int ACTION_PANEL_HEIGHT = WINDOW_HEIGHT;
+
+	/**
+	 * Path to the image icon
+	 */
+	private static final String ICON_PATH = "images/icon.png";
+
+	/**
+	 * Style of the font to use for labels
+	 */
+	private static final int LABEL_FONT_STYLE = Font.BOLD;
+
+	/**
+	 * Size of the font to use for labels
+	 */
+	private static final int LABEL_FONT_SIZE = 15;
+
+	/**
+	 * Title of the window
+	 */
+	private static final String WINDOW_TITLE = "RoboGen (powered by RoboCode)";
+
+	/**
+	 * Height of the action category list
+	 */
+	private static final int ACTION_CATEGORY_LIST_HEIGHT = 200;
+
+	/**
+	 * Height of the action list
+	 */
+	private static final int ACTION_LIST_HEIGHT = 400;
+
+	/**
+	 * Label to display for the action categories
+	 */
+	private static final String ACTION_CATEGORY_LABEL = "Action Categories";
+
+	/**
+	 * Initializes the "Action Panel"
+	 * @return	the "Action Panel"
+	 */
+	private JPanel initActionPanel(){
+		// Setup the action panel (left side of the UI)
+		JPanel actionPanel = new JPanel();
+		actionPanel.setPreferredSize(new Dimension(ACTION_PANEL_WIDTH, ACTION_PANEL_HEIGHT));
+		actionPanel.setLayout(new BoxLayout(actionPanel, BoxLayout.PAGE_AXIS));
+
+		JLabel actionCategoryLabel = new JLabel(ACTION_CATEGORY_LABEL);
+		actionCategoryLabel.setFont(labelFont);
+		actionCategoryLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+		JList<String> actionCategoriesList = initActionCategoriesList();
+
+		// Setup the label for the list of actions
+		JLabel actionsListLabel = new JLabel("Available Actions");
+		actionsListLabel.setFont(labelFont);
+		actionsListLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+		JList<String> actionList = initActionList();
+		
+		actionPanel.add(Box.createRigidArea(new Dimension(0,10)));
+		actionPanel.add(actionCategoryLabel);
+		actionPanel.add(Box.createRigidArea(new Dimension(0,5)));
+		actionPanel.add(actionCategoriesList);
+		actionPanel.add(Box.createRigidArea(new Dimension(0,10)));
+		actionPanel.add(actionsListLabel);
+		actionPanel.add(Box.createRigidArea(new Dimension(0,5)));
+		actionPanel.add(actionList);
+		actionPanel.add(Box.createVerticalGlue());
+
+		return actionPanel;
+	}
+
+	/**
+	 * Initializes the list of action categories
+	 * @return	a list containing the list of action categories
+	 */
+	private JList<String> initActionCategoriesList(){
 
 
-
-		//----[Begin Left-Hand Panel]----
-
-		int cmdPanelWidth = 200;
-		int cmdPanelHeight = window.getHeight();
-		int groupListHeight = 200;
-		int cmdListHeight = 400;
-		// Setup the panel to hold the left side
-		JPanel cmdPanel = new JPanel();
-		cmdPanel.setPreferredSize(new Dimension(cmdPanelWidth, cmdPanelHeight));
-		cmdPanel.setLayout(new BoxLayout(cmdPanel, BoxLayout.PAGE_AXIS));
-
-		// Setup the list of groups of commands
-
-		JLabel groupListText = new JLabel("Action Categories");
-		groupListText.setFont(labelFont);
-		groupListText.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-		groupList.addMouseListener(new MouseAdapter() {
+		// Add the listener to reload the list of actions when an action is
+		// selected
+		JList<String> actionCategoriesList = mActionCategoriesList;
+		actionCategoriesList.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseReleased(MouseEvent arg0) {
-				switchCmdList(groupList.getSelectedIndex());
+
+			/**
+			 * Switches the action list when the mouse is released
+			 * @param event	ignored
+			 */
+			public void mouseReleased(MouseEvent event) {
+				switchCmdList(mActionCategoriesList.getSelectedIndex());
 
 			}
 		});
 
-		groupList.setModel(new AbstractListModel<String>() {
+		// Create the model used to populate the data
+		actionCategoriesList.setModel(new AbstractListModel<String>() {
 			private static final long serialVersionUID = 1L;
 			String[] values = new String[] {"Basic Movement", "Basic Turning", "Basic Gun Control", "Advanced Turning"};
 			public int getSize() {
@@ -144,49 +227,71 @@ public class MainWindow {
 				return values[index];
 			}
 		});
-		groupList.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		groupList.setPreferredSize(new Dimension(groupListHeight, cmdPanelWidth));
-		groupList.setSelectedIndex(0);
-		groupList.setAlignmentX(Component.LEFT_ALIGNMENT);
-		groupList.setFixedCellWidth(cmdPanelWidth);
 
+		// Finish setting up the list
+		actionCategoriesList.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		actionCategoriesList.setPreferredSize(new Dimension(ACTION_CATEGORY_LIST_HEIGHT, ACTION_PANEL_WIDTH));
+		actionCategoriesList.setSelectedIndex(0);
+		actionCategoriesList.setAlignmentX(Component.LEFT_ALIGNMENT);
+		actionCategoriesList.setFixedCellWidth(ACTION_PANEL_WIDTH);
 
+		return actionCategoriesList;
 
-		// Setup the list of commands
-		JLabel cmdListText = new JLabel("Available Actions");
-		//cmdListText.setBounds(10, 145, 200, 20);
-		cmdListText.setFont(labelFont);
-		cmdListText.setAlignmentX(Component.LEFT_ALIGNMENT);
+	}
 
-		cmdList.addMouseListener(new MouseAdapter() {
+	/**
+	 * Width of the action list cell
+	 */
+	private static final int ACTION_LIST_CELL_WIDTH = 200;
+	
+	/**
+	 * Initializes the action list
+	 * @return	a list containing the actions
+	 */
+	private JList<String> initActionList(){
+
+		// Setup the list of actions
+		JList<String> actionList = mActionList;
+		mActionList.addMouseListener(new MouseAdapter() {
 			public void mouseReleased(MouseEvent me) {
-				switchCmd(groupList.getSelectedIndex(), cmdList.getSelectedIndex());
+				switchCmd(mActionCategoriesList.getSelectedIndex(), mActionList.getSelectedIndex());
 			}
 		});
-		cmdList.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		cmdList.setAlignmentX(Component.LEFT_ALIGNMENT);
-		cmdList.setPreferredSize(new Dimension(cmdListHeight, cmdPanelWidth));
-		cmdList.setFixedCellWidth(200);
 
-		cmdPanel.add(Box.createRigidArea(new Dimension(0,10)));
-		cmdPanel.add(groupListText);
-		cmdPanel.add(Box.createRigidArea(new Dimension(0,5)));
-		cmdPanel.add(groupList);
-		cmdPanel.add(Box.createRigidArea(new Dimension(0,10)));
-		cmdPanel.add(cmdListText);
-		cmdPanel.add(Box.createRigidArea(new Dimension(0,5)));
-		cmdPanel.add(cmdList);
-		cmdPanel.add(Box.createVerticalGlue());
-		//----[End Left-Hand Panel]----
+		actionList.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		actionList.setAlignmentX(Component.LEFT_ALIGNMENT);
+		actionList.setPreferredSize(new Dimension(ACTION_LIST_HEIGHT, ACTION_PANEL_WIDTH));
+		actionList.setFixedCellWidth(ACTION_LIST_CELL_WIDTH);
 
-		//----[Begin Middle Panel]----
+		return actionList;
+	}
+	
+	/**
+	 * Initializes the contents of the frame.
+	 */
+	private void initialize() {
+
+		// Set the font and the icon
+		Font labelFont = new Font(null, LABEL_FONT_STYLE, LABEL_FONT_SIZE);
+		ImageIcon icon = new ImageIcon(ICON_PATH);
+
+		// Setup the window
+		window = new JFrame(WINDOW_TITLE);
+		window.setSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
+		window.setLocationRelativeTo(null);
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		window.setIconImage(icon.getImage());
+
+		// Get the action panel
+		JPanel actionPanel = initActionPanel();
+		
 		int controlPanelWidth = 100;
 		int controlPanelHeight = window.getHeight();
 		JPanel addPanel = new JPanel();
 		addPanel.setPreferredSize(new Dimension(controlPanelWidth, controlPanelHeight));
 		addPanel.setLayout(new BoxLayout(addPanel, BoxLayout.PAGE_AXIS));
 
-		
+
 		JLabel paramText = new JLabel("Parameters");
 		paramText.setFont(labelFont);
 		paramText.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -195,16 +300,16 @@ public class MainWindow {
 		JPanel turning, moving, fire, wait, both, blank=new JPanel();
 		turning=new JPanel();
 		JLabel tLb=new JLabel("Degrees: ");
-		tAr=new JTextArea("0",1,4);
+		mDegreesArea=new JTextArea("0",1,4);
 		turning.add(tLb);
-		turning.add(tAr);
-		tAr.getDocument().addDocumentListener(new DocumentListener(){
+		turning.add(mDegreesArea);
+		mDegreesArea.getDocument().addDocumentListener(new DocumentListener(){
 
 			@Override
 			public void changedUpdate(DocumentEvent source) {
 
 				Document sourceDocument = source.getDocument();
-				
+
 				if(sourceDocument.getLength() == 0){
 					angle = 0;
 				}else{
@@ -233,9 +338,9 @@ public class MainWindow {
 		});
 		moving=new JPanel();
 		JLabel mLb=new JLabel("Pixels: ");
-		mAr=new JTextArea("0",1,4);
+		mPixelsArea=new JTextArea("0",1,4);
 		moving.add(mLb);
-		moving.add(mAr);
+		moving.add(mPixelsArea);
 
 		both=new JPanel();
 		both.add(new JLabel("Pixels: "));
@@ -267,7 +372,7 @@ public class MainWindow {
 
 		//////////////////////
 		//===========================================================END PETER'S CODE
-		
+
 		JLabel addBtnText = new JLabel("Add Action");
 		addBtnText.setFont(labelFont);
 		addBtnText.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -304,14 +409,14 @@ public class MainWindow {
 			public void mouseReleased(MouseEvent me) {
 				Writer.writeToJavaFile(d.mModelRun.data,d.mModelScan.data,d.mModelBullet.data,d.mModelWall.data);
 				addCodeToWindow();
-				
+
 				JOptionPane.showMessageDialog(null, "Code Generated to D drive","Generation Success", 1);
-				
-				
+
+
 			}
 		});
 		generateBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
-		
+
 		addPanel.add(Box.createRigidArea(new Dimension(0,10)));
 		addPanel.add(programInfo());
 		addPanel.add(Box.createRigidArea(new Dimension(0,10)));
@@ -430,36 +535,36 @@ public class MainWindow {
 		codePanel = new JPanel();
 		codePanel.setPreferredSize(new Dimension(codePanelWidth,window.getHeight()));
 		codePanel.setLayout(new BoxLayout(codePanel, BoxLayout.PAGE_AXIS));
-		
+
 		JLabel codePanelText = new JLabel("Generated Code");
 		codePanelText.setFont(labelFont);
 		codePanelText.setAlignmentX(Component.LEFT_ALIGNMENT);
-		
+
 
 		codeTextArea = new JTextArea();
 		codeTextArea.setEditable(false);
 		codeTextArea.setPreferredSize(new Dimension(codePanelWidth-10, codeAreaHeight-10));
 		codeTextArea.setText("No Actions");
-		
+
 		codeTextArea.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		JScrollPane codeScrollPane = new JScrollPane(codeTextArea);
 		codeScrollPane.setPreferredSize(new Dimension(codePanelWidth, codeAreaHeight));
-		
+
 		codeScrollPane.setAlignmentX(Component.LEFT_ALIGNMENT);
-		
+
 		codePanel.add(Box.createRigidArea(new Dimension(0,10)));
 		codePanel.add(codePanelText);
 		codePanel.add(Box.createRigidArea(new Dimension(0,5)));
 		codePanel.add(codeScrollPane);
 		codePanel.add(Box.createVerticalGlue());
-		
+
 		// Add the panes to the windows
 		Container windowContent = window.getContentPane();
 		windowContent.setLayout(new BoxLayout(windowContent, BoxLayout.LINE_AXIS));
-		
+
 		windowContent.add(Box.createHorizontalGlue());
-		windowContent.add(cmdPanel);
+		windowContent.add(actionPanel);
 		windowContent.add(Box.createRigidArea(new Dimension(10, 0)));
 		windowContent.add(addPanel);
 		windowContent.add(Box.createRigidArea(new Dimension(10, 0)));
@@ -467,37 +572,37 @@ public class MainWindow {
 		windowContent.add(Box.createRigidArea(new Dimension(10, 0)));
 		windowContent.add(codePanel);
 		windowContent.add(Box.createHorizontalGlue());
-		
+
 
 		window.setJMenuBar(createMenuBar());
 	}
 
 	protected void addCodeToWindow() {
-		
+
 		File codeFile = new File("D:\\DD_Robot.java");
-		
+
 		try {
 			Scanner fileScan = new Scanner(codeFile);
-			
+
 			String fileLine = "";
-			
+
 			while(fileScan.hasNext()){
-				
+
 				fileLine += fileScan.nextLine() + "\n";
-				
+
 			}
-			
+
 			codeTextArea.setText(fileLine);
-			
+
 			fileScan.close();
-			
+
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		codePanel.repaint();
-		
+
 	}
 
 	private JMenuBar createMenuBar(){
@@ -560,18 +665,18 @@ public class MainWindow {
 		try{
 			JLayeredPane robotPane = new JLayeredPane();
 			robotPane.setAlignmentX(Component.CENTER_ALIGNMENT);
-			
+
 			JLabel robotText = new JLabel("Sample Robot");
 			robotText.setFont(labelFont);
 			robotText.setAlignmentX(Component.CENTER_ALIGNMENT);
-			
+
 			ImageIcon bodyIcon = new ImageIcon("images/body.png");
 			final BufferedImage turretIcon = toBufferedImage(Toolkit.getDefaultToolkit().createImage("images/turret.png"));
 
 			JLabel bodyLabel = new JLabel(bodyIcon);
 			bodyLabel.setBounds(60, 10, bodyIcon.getIconWidth(), bodyIcon.getIconHeight());
 			bodyLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-			
+
 			JPanel turretLabel = new JPanel(){
 				private static final long serialVersionUID = 1L;
 
@@ -595,12 +700,12 @@ public class MainWindow {
 			turretLabel.setBounds(42, 0, 70, 70);
 			turretLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 			turretLabel.setOpaque(false);
-			
+
 			robotPane.add(bodyLabel, new Integer(0));
 			robotPane.add(turretLabel, new Integer(1));
-		
+
 			//turretLabel.setBorder(BorderFactory.createLineBorder(Color.black));
-			
+
 			returnPanel.add(robotText);
 			returnPanel.add(Box.createRigidArea(new Dimension(0,5)));
 			returnPanel.add(robotPane);
@@ -615,10 +720,10 @@ public class MainWindow {
 
 	private JPanel programInfo(){
 		ImageIcon icon = new ImageIcon("images/icon.png");
-		
+
 		JPanel returnPanel = new JPanel();
 		returnPanel.setLayout(new BoxLayout(returnPanel, BoxLayout.PAGE_AXIS));
-		
+
 		JLabel programIcon = new JLabel(icon);
 		programIcon.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -629,7 +734,7 @@ public class MainWindow {
 		JLabel programVersion = new JLabel("Version 1.0");
 		programVersion.setFont(labelFont);
 		programVersion.setAlignmentX(Component.CENTER_ALIGNMENT);
-		
+
 		returnPanel.add(programIcon);
 		returnPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 		returnPanel.add(programName);
@@ -639,22 +744,22 @@ public class MainWindow {
 	private void switchCmdList(int index) {
 		switch(index) {
 		case 0:
-			cmdList.setModel(d.mCatBasicMove);
+			mActionList.setModel(d.mCatBasicMove);
 			break;
 		case 1:
-			cmdList.setModel(d.mCatBasicTurn);
+			mActionList.setModel(d.mCatBasicTurn);
 			break;
 		case 2:
-			cmdList.setModel(d.mCatBasicGun);
+			mActionList.setModel(d.mCatBasicGun);
 			break;
 		case 3:
-			cmdList.setModel(d.mCatAdvTurn);
+			mActionList.setModel(d.mCatAdvTurn);
 			break;
 		default:
-			cmdList.setModel(d.mCatBasicMove);
+			mActionList.setModel(d.mCatBasicMove);
 			break;
 		}
-		cmdList.setSelectedIndex(0);
+		mActionList.setSelectedIndex(0);
 		switchCmd(index,0);
 		gnum=index;
 	}
@@ -696,19 +801,19 @@ public class MainWindow {
 	public String getParams() {
 
 		int group=gnum;
-		int cmd=cmdList.getSelectedIndex();
+		int cmd=mActionList.getSelectedIndex();
 		switch(group){
 		case 0:
 			if(cmd!=2)
 			{
-				return mAr.getText();
+				return mPixelsArea.getText();
 			}
 			break;
 		case 1:
-			return tAr.getText();
+			return mDegreesArea.getText();
 		case 2:
 			if(cmd!=0){
-				return tAr.getText();
+				return mDegreesArea.getText();
 			}
 			break;
 		case 3:
@@ -743,7 +848,7 @@ public class MainWindow {
 	 */
 	private void addCmd() {
 		ActionListTableModel rModel = (ActionListTableModel) rightTable.getModel();
-		String selectedValue = (String)cmdList.getSelectedValue();
+		String selectedValue = (String)mActionList.getSelectedValue();
 		rModel.addValueAt(selectedValue,getParams());
 		rightTable.repaint();
 	}
