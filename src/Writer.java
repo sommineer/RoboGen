@@ -12,10 +12,13 @@ import java.io.*;
 public class Writer {
 	
 	private static PrintWriter file;
+	
+	
+	public static String filePath = "D:\\DD_Robot.java";
 
     public static void writeToJavaFile(String[][] run, String[][] scan, String[][] bullet, String[][] wall) {
     	try{
-    		FileWriter fw=new FileWriter("D:\\DD_Robot.java"/*robocode\\robots\\discoveryDay\\Robot.java"*/);
+    		FileWriter fw=new FileWriter(filePath);
     		file=new PrintWriter(fw);
     		file.println("package discoveryDay;\n\nimport robocode.*;\n\n");
     		file.println("public class DD_Robot extends JuniorRobot{\n\n\tpublic void run() {\n\t\t\n\n\t\t\twhile(true) {");
