@@ -1,0 +1,3 @@
+@ECHO OFF
+
+"C:\Program Files\Java\jdk1.7.0\bin\java" -classpath "D:\RoboGen.jar;C:\robocode\libs\robocode.jar;C:\robocode\libs\robocode.core-1.7.3.5.jar;C:\robocode\libs\codesize-1.1.jar;C:\robocode\libs\picocontainer-2.8.jar;C:\robocode\libs\robocode.battle-1.7.3.5.jar;C:\robocode\libs\robocode.host-1.7.3.5.jar;C:\robocode\libs\robocode.repository-1.7.3.5.jar;C:\robocode\libs\robocode.sound-1.7.3.5.jar;C:\robocode\libs\robocode.ui.editor-1.7.3.5.jar;C:\robocode\libs\robocode.ui-1.7.3.5.jar;C:\robocode\libs\roborumble.jar" Driver
