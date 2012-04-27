@@ -588,6 +588,8 @@ public class MainWindow {
 
 	protected void startBattle() {
 		
+		System.out.println(System.getProperty("java.class.path"));
+		
 		RobocodeEngine roboEngine = new RobocodeEngine(new File(roboCodeDirectory));
 		
 		File robotDirectory = RobocodeEngine.getRobotsDir();
@@ -646,7 +648,7 @@ public class MainWindow {
 		
 		BattlefieldSpecification batFieldSpec = new BattlefieldSpecification();
 		
-		BattleSpecification batSpec = new BattleSpecification(3,batFieldSpec,robotsToBattle);
+		BattleSpecification batSpec = new BattleSpecification(2,batFieldSpec,robotsToBattle);
 		
 		roboEngine.setVisible(true);
 		
